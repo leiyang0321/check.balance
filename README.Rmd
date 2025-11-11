@@ -1,8 +1,3 @@
----
-title: "README"
-output: html_document
----
-
 # check_balance
 
 This R package includes a function (```check_balance```) that returns a descriptive table summarizing the descriptive statistics for two groups, allowing users to conduct group comparisons when needed.
@@ -17,7 +12,7 @@ Given a dataset with two groups (e.g., data from a case-control study), ```check
 
 ### R Installation Instructions
 
-```{r}
+```r
 install.packages("devtools") 
 library(devtools)
 devtools::install_github("leiyang0321/check.balance")
@@ -28,7 +23,7 @@ library(check.balance)
 
 For instance, ```check_balance``` can be used to identify differences in the means of all predictors (or explanatory variables) between two groups, and to perform either Pearson’s chi-squared test or Fisher’s exact test to compute the corresponding test statistics and p-values.
 
-```{r}
+```r
 check_balance(data = lalonde,
               treatment = "treat",
               num = c("age", "educ"),
