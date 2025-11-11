@@ -55,7 +55,7 @@ check_balance <- function(data, treatment,
   if (!is.null(num)) {
     res_num <- data.frame()
     for (i in 1:length(num)) {
-      result <- broom::tidy(t.test(as.formula(paste(num[i], "~ treat")), data = data))
+      result <- broom::tidy(t.test(as.formula(paste(num[i], "~", treatment)), data = data))
       result$variable <- num[i]
       res_num <- rbind(res_num, result)
     }
