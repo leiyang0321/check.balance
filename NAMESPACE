@@ -2,3 +2,4 @@
 
 export(balance_heatmap)
 export(check_balance)
+export(plot_balance)
