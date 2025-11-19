@@ -4,12 +4,22 @@
 \alias{check_balance}
 \title{Testing Covariate Balance}
 \usage{
-check_balance(data, treatment, num = NULL, cat = NULL, round = NULL)
+check_balance(
+  data,
+  treatment,
+  ref = NULL,
+  num = NULL,
+  cat = NULL,
+  round = NULL
+)
 }
 \arguments{
 \item{data}{Data frame containing the variables}
 
 \item{treatment}{Name of treatment/exposure variable (must be binary)}
+
+\item{ref}{A numeric or character value specifying the reference level for
+the treatment variable}
 
 \item{num}{Vector of numeric variable names (e.g., c("age", "income"))}
 
@@ -27,6 +37,7 @@ Testing Covariate Balance
 \examples{
 check_balance(data = lalonde,
               treatment = "treat",
+              ref = 0,
               num = c("age", "educ"),
               cat = c("race", "married"),
               round = 3)

@@ -2,6 +2,8 @@
 #'
 #' @param data Data frame containing the variables
 #' @param treatment Name of treatment/exposure variable (must be binary)
+#' @param ref A numeric or character value specifying the reference level for
+#'            the treatment variable
 #' @param num Vector of numeric variable names (e.g., c("age", "income"))
 #' @param cat Vector of categorical variable names (e.g., c("sex", "race"))
 #' @param round Number of decimal places for rounding numeric outputs
@@ -12,10 +14,12 @@
 #' @examples
 #' check_balance(data = lalonde,
 #'               treatment = "treat",
+#'               ref = 0,
 #'               num = c("age", "educ"),
 #'               cat = c("race", "married"),
 #'               round = 3)
 check_balance <- function(data, treatment,
+                          ref = NULL,
                           num = NULL,
                           cat = NULL,
                           round = NULL) {
@@ -46,6 +50,13 @@ check_balance <- function(data, treatment,
   }
   if (!is.null(cat) && !is.vector(cat)) {
     stop("'cat' must be a vector or NULL, found: ", class(cat))
+  }
+
+  data[[treatment]] <- as.factor(data[[treatment]])
+  if (!is.null(ref)) {
+    data[[treatment]] <- factor(data[[treatment]],
+                                levels = c(ref,
+                                           setdiff(levels(data[[treatment]]), ref)))
   }
 
   # Calculate treatment distribution
@@ -95,9 +106,10 @@ check_balance <- function(data, treatment,
         statistic = NA,
         p.value = NA,
         df = NA,
-        mean_control = NA,
-        mean_treated = NA,
-        mean_difference = NA,
+        mean_control = mean(data[[cat[i]]][data[treatment] == levels(data[[treatment]])[1]]),
+        mean_treated = mean(data[[cat[i]]][data[treatment] == levels(data[[treatment]])[2]]),
+        mean_difference = mean(data[[cat[i]]][data[treatment] == levels(data[[treatment]])[1]]) -
+          mean(data[[cat[i]]][data[treatment] == levels(data[[treatment]])[2]]),
         conf_low = NA,
         conf_high = NA,
         method = NA)
