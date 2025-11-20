@@ -101,19 +101,33 @@ check_balance <- function(data, treatment,
       conf_high = numeric(),
       method = character())
     for (i in 1:length(cat)) {
+      c_var <- cat[i]
+      data[[c_var]] <- as.factor(data[[c_var]])
+      if (length(levels(data[[c_var]])) == 2) {
+        c_ref <- levels(data[[c_var]])[1]
+        c_name <- paste0(c_var, " (", c_ref, ")")
+        mean_control <- mean(data[[c_var]][data[treatment] == levels(data[[treatment]])[1]] == c_ref, na.rm = TRUE)
+        mean_treated <- mean(data[[c_var]][data[treatment] == levels(data[[treatment]])[2]] == c_ref, na.rm = TRUE)
+        mean_difference <- mean_control - mean_treated
+      } else {
+        c_ref <- NULL
+        c_name <- c_var
+        mean_control <- NA
+        mean_treated <- NA
+        mean_difference <- NA
+      }
       result <- data.frame(
-        variable = cat[i],
+        variable = c_name,
         statistic = NA,
         p.value = NA,
         df = NA,
-        mean_control = mean(data[[cat[i]]][data[treatment] == levels(data[[treatment]])[1]]),
-        mean_treated = mean(data[[cat[i]]][data[treatment] == levels(data[[treatment]])[2]]),
-        mean_difference = mean(data[[cat[i]]][data[treatment] == levels(data[[treatment]])[1]]) -
-          mean(data[[cat[i]]][data[treatment] == levels(data[[treatment]])[2]]),
+        mean_control = mean_control,
+        mean_treated = mean_treated,
+        mean_difference = mean_difference,
         conf_low = NA,
         conf_high = NA,
         method = NA)
-      tbl <- table(data[[treatment]], data[[cat[i]]])
+      tbl <- table(data[[treatment]], data[[c_var]])
 
       chi_test <- tryCatch({ # Try chi-square test first
         chisq.test(tbl)
