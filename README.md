@@ -44,10 +44,10 @@ check_balance(data = lalonde,
               round = 3)
 
 balance_heatmap(data = lalonde,
-                     treatment = "treat",
-                     num = c("age", "educ", "re74"),
-                     cat = c("race", "married", "nodegree"),
-                     title = "Covariate Balance Heatmap"
+                treatment = "treat",
+                num = c("age", "educ", "re74"),
+                cat = c("race", "married", "nodegree"),
+                title = "Covariate Balance Heatmap"
 )
               
 plot_balance(data = lalonde,
