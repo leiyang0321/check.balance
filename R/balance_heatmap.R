@@ -2,9 +2,10 @@
 #'
 #' @description
 #' Creates a heatmap visualizing covariates imbalance between treatment groups
-#' based on standardized mean differences. Numeric variables use
-#' mean-based SMD, while categorical variables use SMD for proportions.
+#' based on standardized mean differences.
+#' Numeric variables use mean-based SMD, while categorical variables use SMD for proportions.
 #' Covariates with SMD greater than the midpoint (default 0.1) are highlighted in red.
+#' This function assumes that check_balance has been run beforehand to validate the inputs.
 #'
 #' @param data Data frame containing the variables.
 #' @param treatment Name of the binary treatment variable.
@@ -17,34 +18,22 @@
 #'
 #' @examples
 #' balance_heatmap(data = lalonde,
-#'                      treatment = "treat",
-#'                      num = c("age", "educ", "re74"),
-#'                      cat = c("race", "married", "nodegree"),
-#'                      title = "Covariate Balance Heatmap"
+#'                 treatment = "treat",
+#'                 num = c("age", "educ", "re74"),
+#'                 cat = c("race", "married", "nodegree"),
+#'                 title = "Covariate Balance Heatmap"
 #' )
-balance_heatmap <- function(data, treatment,
-                                 num = NULL, cat = NULL,
-                                 title = "Balance Heatmap") {
-  # Check treatment variable exists
-  if (!treatment %in% names(data)) {
-    stop("Treatment variable '", treatment, "' not found in data")
-  }
+balance_heatmap <- function(data, treatment, num = NULL, cat = NULL, title = "Balance Heatmap") {
   # Check treatment is binary (0/1 or 1/2)
   treat_values <- unique(data[[treatment]])
   if (length(treat_values) != 2) {
     stop("Treatment variable must have exactly 2 levels, found: ", length(treat_values))
   }
-  # Check that at least one of num or cat is provided
-  if (is.null(num) && is.null(cat)) {
-    stop("At least one of 'num' or 'cat' must be provided (cannot both be NULL)")
-  }
-
   # convert single variable to vector
   if (!is.null(num) && is.character(num) && length(num) == 1) num <- c(num)
   if (!is.null(cat) && is.character(cat) && length(cat) == 1) cat <- c(cat)
 
   compute_smd <- function(var, treat) {
-
     # calculate standardized mean difference when variate is numeric
     if (is.numeric(var)) {
       m1 <- mean(var[treat == treat_values[1]], na.rm = TRUE)
@@ -84,7 +73,7 @@ balance_heatmap <- function(data, treatment,
   results <- results[order(results$smd, decreasing = FALSE), ]
   results$variable <- factor(results$variable, levels = results$variable)
 
-  print(results)
+  # print(results)
 
   # plot the heatmap
   library(ggplot2)
