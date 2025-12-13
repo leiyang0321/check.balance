@@ -39,6 +39,7 @@ For instance,
 ```r
 check_balance(data = lalonde,
               treatment = "treat",
+              ref=0,
               num = c("age", "educ"),
               cat = c("race", "married"),
               round = 3)
@@ -47,8 +48,7 @@ balance_heatmap(data = lalonde,
                 treatment = "treat",
                 num = c("age", "educ", "re74"),
                 cat = c("race", "married", "nodegree"),
-                title = "Covariate Balance Heatmap"
-)
+                title = "Covariate Balance Heatmap")
               
 plot_balance(data = lalonde,
              treatment = "treat",
