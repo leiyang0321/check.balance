@@ -39,7 +39,7 @@ For instance,
 ```r
 check_balance(data = lalonde,
               treatment = "treat",
-              ref=0,
+              ref = 0,
               num = c("age", "educ"),
               cat = c("race", "married"),
               round = 3)
